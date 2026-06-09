@@ -13,7 +13,7 @@ steps:
 
 - script: |
     pip install --upgrade pip
-    pip install -r requirements.txt
+    pip install -r requirement.txt
   displayName: Install Dependencies
 
 - script: |

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-app = FastAPI(title="VMSS Demo API")
+app = FastAPI(title="VMSS Demo API v2")
 
 @app.get("/")
 def home():

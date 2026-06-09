@@ -1,0 +1,23 @@
+trigger:
+- main
+
+pool:
+  name: Linux-Build-Agents
+
+steps:
+- checkout: self
+
+- script: |
+    sudo apt-get update
+    sudo apt-get install -y python3 python3-pip
+
+    python3 --version
+    pip3 --version
+
+    pip3 install -r requirements.txt
+
+  displayName: Install Python and Dependencies
+
+- script: |
+    python3 -c "import main; print('FastAPI app imported successfully')"
+  displayName: Verify Application

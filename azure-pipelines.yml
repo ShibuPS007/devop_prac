@@ -7,6 +7,7 @@ pool:
 steps:
 - checkout: self
 
+<<<<<<< HEAD
 - script: |
     sudo apt-get update
     sudo apt-get install -y python3 python3-pip python3-venv
@@ -20,3 +21,21 @@ steps:
     python -c "import main; print('FastAPI app imported successfully')"
 
   displayName: "Install Dependencies and Verify App"
+=======
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.12'
+
+- script: |
+    pip install -r requirements.txt
+  displayName: Install Dependencies
+
+- script: |
+    python -c "import main"
+  displayName: Verify FastAPI App
+
+- script: |
+    echo "Running on VMSS agent"
+    hostname
+  displayName: Show Agent
+>>>>>>> 7fc901e8a8caf1da9f95ae4b744b0547dec33b08

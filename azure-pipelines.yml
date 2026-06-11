@@ -71,6 +71,6 @@ jobs:
     displayName: "Install Docker"
 
   - script: |
-      docker build -t fastapi-math-api .
-      docker images
+      sudo docker build -t fastapi-math-api .
+      sudo docker images
     displayName: "Build Docker Image"

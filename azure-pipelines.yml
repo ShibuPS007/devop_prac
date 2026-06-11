@@ -24,7 +24,6 @@ jobs:
       pip install -r requirement.txt
 
       python -m pytest tests/test_unit.py
-
     displayName: "Run Unit Tests"
 
 
@@ -46,7 +45,6 @@ jobs:
       pip install -r requirement.txt
 
       python -m pytest tests/test_functional.py
-
     displayName: "Run Functional Tests"
 
 
@@ -64,7 +62,15 @@ jobs:
   - checkout: self
 
   - script: |
+      sudo apt-get update
+      sudo apt-get install -y docker.io
+
+      sudo systemctl start docker
+
+      docker --version
+    displayName: "Install Docker"
+
+  - script: |
       docker build -t fastapi-math-api .
       docker images
-
     displayName: "Build Docker Image"

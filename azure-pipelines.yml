@@ -4,26 +4,67 @@ trigger:
 pool:
   name: Linux-Build-Agents
 
-steps:
-- checkout: self
+jobs:
 
-- script: |
-    sudo apt-get update
-    sudo apt-get install -y python3 python3-pip python3-venv
+# ---------------- UNIT TESTS ----------------
+- job: UnitTests
+  displayName: "Unit Tests"
 
-    python3 -m venv venv
-    source venv/bin/activate
+  steps:
+  - checkout: self
 
-    pip install --upgrade pip
-    pip install -r requirement.txt
-  displayName: Install Dependencies
+  - script: |
+      sudo apt-get update
+      sudo apt-get install -y python3 python3-pip python3-venv
 
-- script: |
-    source venv/bin/activate
-    python -c "import main; print('FastAPI app imported successfully')"
-  displayName: Verify FastAPI App
+      python3 -m venv venv
+      source venv/bin/activate
 
-- script: |
-    echo "Running on VMSS agent"
-    hostname
-  displayName: Show Agent
+      pip install --upgrade pip
+      pip install -r requirement.txt
+
+      python -m pytest tests/test_unit.py
+
+    displayName: "Run Unit Tests"
+
+
+# ---------------- FUNCTIONAL TESTS ----------------
+- job: FunctionalTests
+  displayName: "Functional Tests"
+
+  steps:
+  - checkout: self
+
+  - script: |
+      sudo apt-get update
+      sudo apt-get install -y python3 python3-pip python3-venv
+
+      python3 -m venv venv
+      source venv/bin/activate
+
+      pip install --upgrade pip
+      pip install -r requirement.txt
+
+      python -m pytest tests/test_functional.py
+
+    displayName: "Run Functional Tests"
+
+
+# ---------------- DOCKER BUILD ----------------
+- job: DockerBuild
+  displayName: "Build Docker Image"
+
+  dependsOn:
+  - UnitTests
+  - FunctionalTests
+
+  condition: succeeded()
+
+  steps:
+  - checkout: self
+
+  - script: |
+      docker build -t fastapi-math-api .
+      docker images
+
+    displayName: "Build Docker Image"

@@ -66,16 +66,12 @@ jobs:
   steps:
   - checkout: self
 
-  - script: |
-      sudo apt-get update
-      sudo apt-get install -y docker.io
-
-      sudo systemctl start docker
-
-      docker --version
-    displayName: "Install Docker"
-
-  - script: |
-      sudo docker build -t fastapi-math-api .
-      sudo docker images
-    displayName: "Build Docker Image"
+  - task: Docker@2
+    displayName: Build and Push Image
+    inputs:
+      command: buildAndPush
+      repository: shibups/fastapi-math-api
+      dockerfile: Dockerfile
+      containerRegistry: DockerHubConnection
+      tags: |
+        latest

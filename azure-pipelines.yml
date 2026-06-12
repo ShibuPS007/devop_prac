@@ -1,14 +1,14 @@
 trigger:
 - main
 
-pool:
-  name: Linux-Build-Agents
-
 jobs:
 
 # ---------------- UNIT TESTS ----------------
 - job: UnitTests
   displayName: "Unit Tests"
+
+  pool:
+    name: UnitTestPool
 
   steps:
   - checkout: self
@@ -31,6 +31,9 @@ jobs:
 - job: FunctionalTests
   displayName: "Functional Tests"
 
+  pool:
+    name: FunctionalPool
+
   steps:
   - checkout: self
 
@@ -48,9 +51,11 @@ jobs:
     displayName: "Run Functional Tests"
 
 
-# ---------------- DOCKER BUILD ----------------
 - job: DockerBuild
   displayName: "Build Docker Image"
+
+  pool:
+    name: BuildPool
 
   dependsOn:
   - UnitTests

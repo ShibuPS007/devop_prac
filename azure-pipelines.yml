@@ -51,23 +51,33 @@ jobs:
     displayName: "Run Functional Tests"
 
 
+# ---------------- DOCKER BUILD & PUSH ----------------
 - job: DockerBuild
-  displayName: "Build Docker Image"
+  displayName: "Build and Push Docker Image"
 
   pool:
     name: UnitTestPool
 
   dependsOn:
-  - UnitTests
-  - FunctionalTests
+    - UnitTests
+    - FunctionalTests
 
   condition: succeeded()
 
   steps:
   - checkout: self
 
+  - script: |
+      sudo apt-get update
+      sudo apt-get install -y docker.io
+
+      sudo systemctl start docker
+
+      docker --version
+    displayName: "Install Docker"
+
   - task: Docker@2
-    displayName: Build and Push Image
+    displayName: "Build and Push Image"
     inputs:
       command: buildAndPush
       repository: shibups/fastapi-math-api

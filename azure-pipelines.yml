@@ -55,7 +55,7 @@ jobs:
   displayName: "Build Docker Image"
 
   pool:
-    name: BuildPool
+    name: UnitTestPool
 
   dependsOn:
   - UnitTests

@@ -32,7 +32,7 @@ jobs:
   displayName: "Functional Tests"
 
   pool:
-    name: FunctionalPool
+    name: FunctionalTestPool
 
   steps:
   - checkout: self

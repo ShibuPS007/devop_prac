@@ -40,7 +40,23 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Build and Push Docker Image
+      # Build image locally
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: calculator-app:latest
+
+      # Scan image with Trivy
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: calculator-app:latest
+          severity: HIGH,CRITICAL
+          exit-code: :'1'
+
+      # Push image only if scan succeeds
       - name: Build and Push Docker image
         uses: docker/build-push-action@v6
         with:
